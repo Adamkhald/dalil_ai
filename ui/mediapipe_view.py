@@ -8,8 +8,11 @@ import sys
 
 try:
     from dalil_ai.core.mediapipe_logic import MediaPipeProcessor
-except ImportError:
+    MP_AVAILABLE = True
+except Exception as e:
+    print(f"MediaPipe import failed: {e}")
     MediaPipeProcessor = None
+    MP_AVAILABLE = False
 
 class VideoWorker(QThread):
     frame_ready = Signal(QImage)
@@ -63,12 +66,13 @@ class MediaPipeView(QWidget):
         self.worker = None
         self.processor = None
         
-        # Init processor if deps available
-        if MediaPipeProcessor:
+        # Init processor if deps available and import succeeded
+        if MP_AVAILABLE and MediaPipeProcessor:
             try:
                 self.processor = MediaPipeProcessor()
             except Exception as e:
                 print(f"Error init MP: {e}")
+                self.processor = None
 
     def init_ui(self):
         main_layout = QVBoxLayout(self)
