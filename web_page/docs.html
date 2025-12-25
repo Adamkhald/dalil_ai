@@ -72,16 +72,20 @@
                     <li>Optional: NVIDIA GPU with CUDA for faster training</li>
                 </ul>
 
-                <h3>Running from Source</h3>
-                <pre><code># 1. Unzip the downloaded folder
-# 2. Open a terminal in the folder
+                <h3>Running from Source (Universal)</h3>
+                <p>The best way to run Dalil AI on any OS (Windows, macOS, Linux) is via Git. This ensures you have the
+                    latest updates.</p>
+                <pre><code># 1. Clone the repository
+git clone https://github.com/Adamkhald/dalil_ai.git
+cd dalil_ai
 
-# 3. Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run the app
+# 3. Run the app
 python main.py</code></pre>
-                <p>On Windows, you can simply double-click <code>run_windows.bat</code> included in the root directory.
+                <p>Note regarding <strong>macOS</strong>: The visual "Launchers" are Windows-only. On Mac, always use
+                    the terminal commands above.</p>
                 </p>
 
                 <h2 id="sklearn">🔬 Scikit-Learn Pipeline</h2>
