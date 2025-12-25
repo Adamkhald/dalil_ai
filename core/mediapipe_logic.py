@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
-import mediapipe as mp
 
 class MediaPipeProcessor:
     def __init__(self):
+        # Import MediaPipe only when needed, not at module level
+        # This prevents the entire module from failing if mediapipe has issues
+        import mediapipe as mp
+        
         # Handle both old and new MediaPipe versions
         try:
             # Try new-style imports (mediapipe >= 0.10.8)
