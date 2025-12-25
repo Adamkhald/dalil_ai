@@ -4,16 +4,28 @@ import mediapipe as mp
 
 class MediaPipeProcessor:
     def __init__(self):
-        self.mp_drawing = mp.solutions.drawing_utils
-        self.mp_drawing_styles = mp.solutions.drawing_styles
+        # Handle both old and new MediaPipe versions
+        try:
+            # Try new-style imports (mediapipe >= 0.10.8)
+            from mediapipe.python.solutions import drawing_utils, drawing_styles
+            from mediapipe.python.solutions import face_detection, face_mesh, hands, pose
+            
+            self.mp_drawing = drawing_utils
+            self.mp_drawing_styles = drawing_styles
+            self.mp_face_detection = face_detection
+            self.mp_face_mesh = face_mesh
+            self.mp_hands = hands
+            self.mp_pose = pose
+        except (ImportError, AttributeError):
+            # Fallback to old-style imports (mediapipe < 0.10.8)
+            self.mp_drawing = mp.solutions.drawing_utils
+            self.mp_drawing_styles = mp.solutions.drawing_styles
+            self.mp_face_detection = mp.solutions.face_detection
+            self.mp_face_mesh = mp.solutions.face_mesh
+            self.mp_hands = mp.solutions.hands
+            self.mp_pose = mp.solutions.pose
         
-        # Initialize Solutions
-        self.mp_face_detection = mp.solutions.face_detection
-        self.mp_face_mesh = mp.solutions.face_mesh
-        self.mp_hands = mp.solutions.hands
-        self.mp_pose = mp.solutions.pose
-        
-        # Persistent solution objects (lazy init could be better but let's init here for simplicity)
+        # Initialize detection models
         self.face_detection = self.mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
         self.face_mesh = self.mp_face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True, min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.hands = self.mp_hands.Hands(model_complexity=0, min_detection_confidence=0.5, min_tracking_confidence=0.5)
