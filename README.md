@@ -1,0 +1,80 @@
+# 🧠 Dalil AI - The Offline Research Lab
+<p align="center">
+  <img src="web_page/logo.png" alt="Dalil AI Logo" width="120">
+</p>
+
+<p align="center">
+  <b>A comprehensive, offline-first Machine Learning & Deep Learning studio.</b><br>
+  Built with Python, PySide6, PyTorch, TensorFlow, and MediaPipe.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow">
+  <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20Mac-lightgrey?style=for-the-badge" alt="Platform">
+</p>
+
+---
+
+## 🚀 Features
+
+### 🔬 Scikit-Learn Pipeline
+- **7-Step Wizard**: From data loading to model export.
+- **Auto-Preprocessing**: Imputation, Label Encoding, and Scaling.
+- **Algorithms**: Random Forest, SVM, Logistic/Linear Regression.
+- **Visuals**: Confusion matrices, Feature Importance plots.
+
+### 🔥 PyTorch Deep Learning
+- **No-Code Training**: Select dataset, model (ResNet/MobileNet), and train.
+- **Transfer Learning**: Fine-tune pre-trained models on your custom data.
+- **Fast Mode**: Resize images to 128px for rapid CPU prototyping.
+- **Validation**: Visual grid of predictions vs ground truth.
+
+### 🧠 TensorFlow Production
+- **Mobile Read**: Export models directly to `.tflite` for Android/iOS.
+- **Keras API**: Built on the industry-standard Keras interface.
+- **Robust Training**: ModelCheckpoint and EarlyStopping included.
+
+### 📸 MediaPipe Vision
+- **Real-Time AI**: Face Mesh, Hand Tracking, and Pose Estimation.
+- **CPU Optimized**: Runs at 30+ FPS on standard laptops without GPU.
+
+### 🎮 RL Studio
+- **Agents**: Train PPO, DQN, SAC agents.
+- **Environments**: LunarLander, CartPole, BipedalWalker.
+- **Visualization**: Watch agents learn in real-time.
+
+---
+
+## 🛠️ Installation
+
+### Option 1: Source (Recommended)
+This uses your local Python and GPU drivers.
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/Adamkhald/dalil_ai.git
+cd dalil_ai
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run
+python main.py
+```
+
+### Option 2: Windows Launcher
+Simply double-click `run_windows.bat` in the root folder.
+
+---
+
+## 🌐 Showcase Website
+Check out the `web_page/` folder for a complete promotional website source code.
+
+## 🤝 Contributing
+Contributions are welcome! Please read `web_page/contribute.html` for guidelines.
+
+## 📜 License
+MIT License - Free for research and academic use.
+

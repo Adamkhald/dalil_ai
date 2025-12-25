@@ -1,0 +1,41 @@
+# Bytes
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.env
+.venv
+
+# Distribution / Packaging
+build/
+dist/
+*.spec
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Datasets & Models (Large files)
+*.pkl
+*.pth
+*.h5
+*.tflite
+*.onnx
+
+# Local Data
+data/*
+!data/readme.txt
+# (Assuming you might want to keep the folder but not the data, or you can remove the ! line if data folder should be fully ignored)
+
+# Generated Logs and Reports
+*.log
+pipeline_script.py
+
+# OS generated
+.DS_Store
+Thumbs.db

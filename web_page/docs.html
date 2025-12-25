@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation | Dalil AI</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sidebar a {
+            display: block;
+            padding: 5px 0;
+        }
+
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">
+                    <img src="logo.png" alt="Logo" height="32" style="vertical-align: middle; margin-right: 10px;">
+                    Dalil AI
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="docs.html">Documentation</a>
+                    <a href="contribute.html">Contribute</a>
+                </div>
+            </nav>
+        </header>
+
+        <div class="docs-layout">
+            <aside class="sidebar">
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#sklearn">🔬 Scikit-Learn Pipeline</a></li>
+                    <li><a href="#pytorch">🔥 PyTorch Lab</a></li>
+                    <li><a href="#tensorflow">🧠 TensorFlow Hub</a></li>
+                    <li><a href="#mediapipe">📸 MediaPipe Vision</a></li>
+                    <li><a href="#rl-studio">🎮 RL Studio</a></li>
+                    <li><a href="#deployment">Deployment</a></li>
+                </ul>
+            </aside>
+
+            <main class="content">
+                <h1 id="introduction">User Manual</h1>
+                <p>Welcome to the official documentation for Dalil AI. This platform is designed to streamline the
+                    research workflow for data scientists and academics by providing a unified, offline-capable GUI for
+                    the most powerful Python ML libraries.</p>
+
+                <h2 id="installation">Installation</h2>
+                <div class="note">Dalil AI works on Windows, Linux, and macOS. However, we primarily target Windows for
+                    this guide.</div>
+
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Python 3.8 or higher</li>
+                    <li>4GB RAM (8GB recommended for Deep Learning)</li>
+                    <li>Optional: NVIDIA GPU with CUDA for faster training</li>
+                </ul>
+
+                <h3>Running from Source</h3>
+                <pre><code># 1. Unzip the downloaded folder
+# 2. Open a terminal in the folder
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Run the app
+python main.py</code></pre>
+                <p>On Windows, you can simply double-click <code>run_windows.bat</code> included in the root directory.
+                </p>
+
+                <h2 id="sklearn">🔬 Scikit-Learn Pipeline</h2>
+                <p>The Scikit-Learn module offers a 7-step wizard for classical machine learning on tabular data
+                    (Excel/CSV).</p>
+
+                <h3>Steps:</h3>
+                <ol>
+                    <li><strong>Data Load:</strong> Import `.csv` or `.xlsx` files. The app creates a pandas DataFrame
+                        preview.</li>
+                    <li><strong>Preprocess:</strong> Select your Target Column. Handle missing values (Mean/Median
+                        imputation). The app automatically encodes categorical text into numbers using LabelEncoding.
+                    </li>
+                    <li><strong>Feature Engineering:</strong> (Auto) Scaling features using StandardScaler to ensure
+                        zero mean and unit variance.</li>
+                    <li><strong>Model Selection:</strong> Choose between <strong>Classification</strong> (predicting
+                        categories) or <strong>Regression</strong> (predicting numbers).
+                        <ul>
+                            <li>Logic Regression / Linear Regression</li>
+                            <li>Random Forest (Ensemble)</li>
+                            <li>Support Vector Machines (SVM/SVR)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Hyperparameters:</strong> Currently uses sensible defaults (e.g.,
+                        <code>n_estimators=100</code> for RF).
+                    </li>
+                    <li><strong>Evaluation:</strong> View Accuracy, MSE, R2 Score, and Confusion Matrix plots.</li>
+                    <li><strong>Export:</strong> Save the model as `.pkl` or <strong>Export Source Code</strong> (`.py`)
+                        to reproduce results outside the app.</li>
+                </ol>
+
+                <h2 id="pytorch">🔥 PyTorch Lab</h2>
+                <p>Designed for image classification and Transfer Learning. This module handles the complexity of data
+                    loaders and tensor transformations.</p>
+
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Fast Mode:</strong> Option to resize images to 128x128px for rapid CPU prototyping.</li>
+                    <li><strong>Architectures:</strong>
+                        <ul>
+                            <li><strong>MobileNetV2:</strong> Fast, lightweight (Recommended for laptop CPUs).</li>
+                            <li><strong>ResNet18:</strong> Balanced standard for image tasks.</li>
+                            <li><strong>VGG16:</strong> High capacity but slow.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Built-in Datasets:</strong> One-click download for CIFAR10, MNIST, and FashionMNIST.
+                    </li>
+                    <li><strong>Validation:</strong> After training, the "Validation" tab shows a 3x3 grid of real
+                        predictions vs true labels (Green=Correct, Red=Wrong).</li>
+                </ul>
+
+                <h2 id="tensorflow">🧠 TensorFlow Hub</h2>
+                <p>Focused on production-ready Deep Learning using the Keras API.</p>
+
+                <h3>Workflow</h3>
+                <ol>
+                    <li><strong>Dataset:</strong> Load folders of images (Format: `dataset/class_name/image.jpg`).</li>
+                    <li><strong>Model:</strong> Build Custom CNNs or use MobileNet/ResNet backbones.</li>
+                    <li><strong>Callbacks:</strong> Includes `ModelCheckpoint` and `EarlyStopping` to prevent
+                        overfitting.</li>
+                    <li><strong>TFLite Export:</strong> The unique feature of this module is the ability to export
+                        `.tflite` models, ready for Android/iOS deployment.</li>
+                </ol>
+
+                <h2 id="mediapipe">📸 MediaPipe Vision</h2>
+                <p>A real-time Computer Vision playground. Uses your webcam to run inference at high frame rates (30+
+                    fps) on CPU.</p>
+
+                <h3>Modes</h3>
+                <ul>
+                    <li><strong>Face Detection:</strong> Bounding boxes around faces.</li>
+                    <li><strong>Face Mesh:</strong> Maps 468 3D landmarks on the face (great for AR).</li>
+                    <li><strong>Hands:</strong> Tracks 21 landmarks per hand (fingertips, knuckles).</li>
+                    <li><strong>Pose:</strong> Full-body skeletal tracking.</li>
+                </ul>
+
+                <h2 id="rl-studio">🎮 RL Studio</h2>
+                <p>Training autonomous agents using Reinforcement Learning. Implemented using
+                    <strong>Stable-Baselines3</strong> and <strong>Gymnasium</strong>.
+                </p>
+
+                <h3>Environments</h3>
+                <ul>
+                    <li><strong>LunarLander-v3:</strong> Land a spaceship safely between flags.</li>
+                    <li><strong>CartPole-v1:</strong> Balance a pole on a cart.</li>
+                    <li><strong>BipedalWalker-v3:</strong> Teach a robot to walk (requires Box2D).</li>
+                </ul>
+
+                <h3>Algorithms</h3>
+                <ul>
+                    <li><strong>PPO (Proximal Policy Optimization):</strong> The gold standard for continuous control.
+                    </li>
+                    <li><strong>DQN (Deep Q-Network):</strong> Good for discrete action spaces (like CartPole).</li>
+                    <li><strong>SAC (Soft Actor-Critic):</strong> Sample-efficient for robots.</li>
+                </ul>
+                <div class="note">Training is visualized in real-time. You can watch the agent fail and learn over
+                    episodes.</div>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>Dalil AI supports two main modes of distribution:</p>
+
+                <h3>1. Source Distribution (Recommended)</h3>
+                <p>Send the entire project folder to users. They run `run_windows.bat`. This ensures they use their own
+                    local GPU drivers and Python environment.</p>
+
+                <h3>2. Compiled EXE</h3>
+                <p>Use the included `build_app.py` script to generate a standalone executable using PyInstaller. Note
+                    that this results in a large file (~2GB) as it bundles PyTorch dependencies.</p>
+            </main>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Dalil AI. Open Source Research Platform.</p>
+        </footer>
+    </div>
+</body>
+
+</html>

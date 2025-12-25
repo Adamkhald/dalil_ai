@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribute | Dalil AI</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">
+                    <img src="logo.png" alt="Logo" height="32" style="vertical-align: middle; margin-right: 10px;">
+                    Dalil AI
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="docs.html">Documentation</a>
+                    <a href="contribute.html">Contribute</a>
+                </div>
+            </nav>
+        </header>
+
+        <section class="hero" style="padding: 4rem 0;">
+            <h1>Help Us Build the Future.</h1>
+            <p>Dalil AI is open source. We welcome contributions from researchers, developers, and students.</p>
+        </section>
+
+        <div class="docs-layout">
+            <main class="content" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto;">
+                <h2>Getting Started</h2>
+                <p>We believe in clean, documented, and modular code. Before you start, please ensure you have Python
+                    3.8+ and `virtualenv` installed.</p>
+
+                <h3>1. Fork & Clone</h3>
+                <pre><code>git clone https://github.com/your-username/dalil_ai.git
+cd dalil_ai</code></pre>
+
+                <h3>2. Set Up Environment</h3>
+                <pre><code>python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+pip install -r requirements.txt</code></pre>
+
+                <h2>Contribution Guidelines</h2>
+                <ul>
+                    <li><strong>UI/UX:</strong> We use PySide6 (Qt). Keep the UI logic separated from the Core logic
+                        (`ui/` vs `core/`).</li>
+                    <li><strong>Code Style:</strong> Follow PEP 8. Use meaningful variable names (e.g., `train_loader`
+                        not `tl`).</li>
+                    <li><strong>Docstrings:</strong> Every function must have a docstring explaining arguments and
+                        return values.</li>
+                    <li><strong>Testing:</strong> Verify your changes by running the app locally before pushing.</li>
+                </ul>
+
+                <h2>Roadmap</h2>
+                <p>We are currently looking for help with:</p>
+                <ul>
+                    <li>Adding more Gymnasium environments to RL Studio.</li>
+                    <li>Implementing Transformer models in the PyTorch pipeline.</li>
+                    <li>Creating a MacOS `.dmg` installer.</li>
+                    <li>Translating the UI into Arabic and French.</li>
+                </ul>
+
+                <div style="text-align: center; margin-top: 4rem;">
+                    <a href="#" class="btn">Check Issues on GitHub</a>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Dalil AI. Open Source Research Platform.</p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+========================================================================
+                       DALIL AI - BUILD GUIDE
+========================================================================
+
+You have chosen to build the standalone EXE file.
+
+STEP 1: INSTALL PYINSTALLER
+---------------------------
+Open your terminal in this folder and run:
+   pip install pyinstaller
+
+STEP 2: RUN THE BUILD SCRIPT
+----------------------------
+I have prepared a script that configures everything for you.
+Run:
+   python build_app.py
+
+OPTIONS:
+   python build_app.py --no-tf       (Exclude TensorFlow to save ~500MB)
+   python build_app.py --no-torch    (Exclude PyTorch to save ~800MB)
+   python build_app.py --no-cv       (Exclude MediaPipe to save ~200MB)
+
+STEP 3: WAIT
+------------
+The build process will take 2-10 minutes depending on your computer speed.
+It has to bundle massive AI libraries.
+
+STEP 4: LOCATE YOUR EXE
+-----------------------
+When finished, go to:
+   dist/DalilAI/DalilAI.exe
+
+   * You can zip the "DalilAI" folder inside "dist" and share it.
+   * Do NOT just move the .exe file; it needs the surrounding folders.
+
+TROUBLESHOOTING
+---------------
+* If Windows Defender blocks it, click "Run Anyway" (it's safe, just unsigned).
+* If "DLL load failed" errors occur, ensure Visual C++ Redistributable is installed.
