@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn AI | Dalil AI</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .concept-section {
+            padding: 4rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .concept-section:last-child {
+            border-bottom: none;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .concept-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--accent-color);
+        }
+
+        .concept-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .tag-blue { background: #e3f2fd; color: #1976d2; }
+        .tag-green { background: #e8f5e9; color: #2e7d32; }
+        .tag-purple { background: #f3e5f5; color: #7b1fa2; }
+        .tag-orange { background: #fff3e0; color: #f57c00; }
+
+        .library-showcase {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .lib-badge {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">
+                    <img src="logo.png" alt="Logo" height="32" style="vertical-align: middle; margin-right: 10px;">
+                    Dalil AI
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="learn.html" style="color: var(--accent-color);">Learn AI</a>
+                    <a href="docs.html">Documentation</a>
+                    <a href="contribute.html">Contribute</a>
+                </div>
+            </nav>
+        </header>
+
+        <section class="hero" style="padding: 4rem 0;">
+            <h1>The AI Dictionary</h1>
+            <p>Understand the magic behind the machines. A guide to the models and libraries powering Dalil AI.</p>
+        </section>
+
+        <!-- Scikit-Learn / Classical ML -->
+        <section class="concept-section">
+            <h2 style="text-align: center; margin-bottom: 1rem;">Classical Machine Learning</h2>
+            <p style="text-align: center; color: #666; max-width: 700px; margin: 0 auto;">
+                Perfect for structured data (tables, spreadsheets). The foundation of data science.
+            </p>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="concept-icon">📈</span>
+                    <span class="tag tag-blue">Regression</span>
+                    <h3>Linear Regression</h3>
+                    <p>The simplest way to predict a number. It finds the "line of best fit" through your data points. Used for predicting house prices, sales, or temperature.</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">🏷️</span>
+                    <span class="tag tag-blue">Classification</span>
+                    <h3>Logistic Regression</h3>
+                    <p>Despite the name, it's for classification. Predicts probabilities (0 to 1). Great for "Yes/No" questions like "Is this email spam?" or "Will this customer churn?"</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">🌳</span>
+                    <span class="tag tag-green">Ensemble</span>
+                    <h3>Random Forest</h3>
+                    <p>A "forest" of Decision Trees. Each tree votes on the outcome, and the majority wins. Highly accurate and resistant to overfitting.</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">⚔️</span>
+                    <span class="tag tag-purple">Complex</span>
+                    <h3>SVM (Support Vector Machine)</h3>
+                    <p>Finds the optimal boundary (hyperplane) that strictly separates different classes of data. Powerful for clean, high-dimensional datasets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deep Learning / Neural Networks -->
+        <section class="concept-section" style="background-color: #fafafa;">
+            <h2 style="text-align: center; margin-bottom: 1rem;">Deep Learning Architectures</h2>
+            <p style="text-align: center; color: #666; max-width: 700px; margin: 0 auto;">
+                Mimicking the human brain to solve complex perceptual tasks.
+            </p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <span class="concept-icon">🕸️</span>
+                    <span class="tag tag-orange">The Basics</span>
+                    <h3>ANN (Artificial Neural Network)</h3>
+                    <p>The foundation of Deep Learning. Layers of connected mathematical "neurons" that pass signals forward. Good for simple patterns but struggles with images or time.</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">👁️</span>
+                    <span class="tag tag-orange">Vision</span>
+                    <h3>CNN (Convolutional Neural Network)</h3>
+                    <p>Designed for eyes. scans images using "filters" to detect edges, shapes, and textures. The technology behind Face ID, self-driving cars, and medical imaging.</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">⏳</span>
+                    <span class="tag tag-orange">Sequence</span>
+                    <h3>RNN (Recurrent Neural Network)</h3>
+                    <p>Has "memory". Unlike ANN, it remembers previous inputs. Essential for data that comes in a sequence, like text, audio, or stock prices.</p>
+                </div>
+
+                <div class="concept-card">
+                    <span class="concept-icon">🧠</span>
+                    <span class="tag tag-orange">Advanced Sequence</span>
+                    <h3>LSTM (Long Short-Term Memory)</h3>
+                    <p>A supercharged RNN. It can remember things for long periods and "forget" irrelevant info. This is the brain behind Siri, Google Translate, and autocorrect.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Libraries -->
+        <section class="concept-section">
+            <h2 style="text-align: center;">Powered By Giants</h2>
+            <p style="text-align: center; color: #666; max-width: 700px; margin: 1rem auto;">
+                Dalil AI wraps the world's best open-source libraries into one easy interface.
+            </p>
+
+            <div class="library-showcase">
+                <div class="lib-badge" style="border-left: 5px solid #F7931E;">
+                    <span style="margin-right: 10px;">🔬</span> Scikit-Learn
+                </div>
+                <div class="lib-badge" style="border-left: 5px solid #EE4C2C;">
+                    <span style="margin-right: 10px;">🔥</span> PyTorch
+                </div>
+                <div class="lib-badge" style="border-left: 5px solid #FF6F00;">
+                    <span style="margin-right: 10px;">🧠</span> TensorFlow
+                </div>
+                <!-- MediaPipe -->
+                <div class="lib-badge" style="border-left: 5px solid #00B0FF;">
+                    <span style="margin-right: 10px;">📸</span> MediaPipe
+                </div>
+                <div class="lib-badge" style="border-left: 5px solid #29B6F6;">
+                    <span style="margin-right: 10px;">🎮</span> Gymnasium
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Dalil AI. Open Source Research Platform.</p>
+        </footer>
+    </div>
+</body>
+
+</html>
