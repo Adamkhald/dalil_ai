@@ -1,14 +1,19 @@
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, 
-                               QFrame, QPushButton, QLabel, QStackedWidget, QMessageBox, QApplication)
+                               QFrame, QPushButton, QLabel, QStackedWidget, QMessageBox, 
+                               QApplication, QFileDialog, QMenuBar)
 from PySide6.QtCore import Qt
 from dalil_ai.ui.theme import Theme
 from dalil_ai.ui.dashboard import Dashboard
-from dalil_ai.ui.dashboard import Dashboard
+from dalil_ai.core.project_manager import ProjectManager
 
 # Safe Imports for Modules
 try:
     from dalil_ai.ui.sklearn_view import SklearnView
-except ImportError:
+except ImportError as e:
+    print(f"DEBUG: Failed to import SklearnView: {e}")
+    # import traceback
+    # traceback.print_exc()
     SklearnView = None
 
 try:
@@ -30,6 +35,12 @@ try:
     from dalil_ai.ui.rl_studio_view import RLStudioView
 except ImportError:
     RLStudioView = None
+
+# New Education View
+try:
+    from dalil_ai.ui.education_view import EducationView
+except ImportError:
+    EducationView = None
 
 class PlaceholderView(QWidget):
     def __init__(self, module_name):
@@ -65,6 +76,37 @@ class MainWindow(QMainWindow):
             
         self.resize(1280, 800)
         self.init_ui()
+        self.init_menu()
+
+    def init_menu(self):
+        menubar = self.menuBar()
+        menubar.setStyleSheet(f"background-color: {Theme.COLOR_MAIN_BG}; color: {Theme.COLOR_TEXT_MAIN}; selection-background-color: {Theme.COLOR_PRIMARY};")
+        
+        # File Menu
+        file_menu = menubar.addMenu("File")
+        
+        new_action = QAction("New Project", self)
+        new_action.setShortcut("Ctrl+N")
+        new_action.triggered.connect(self.new_project)
+        file_menu.addAction(new_action)
+        
+        file_menu.addSeparator()
+        
+        save_action = QAction("Save Project", self)
+        save_action.setShortcut("Ctrl+S")
+        save_action.triggered.connect(self.save_project)
+        file_menu.addAction(save_action)
+        
+        load_action = QAction("Load Project", self)
+        load_action.setShortcut("Ctrl+O")
+        load_action.triggered.connect(self.load_project)
+        file_menu.addAction(load_action)
+        
+        file_menu.addSeparator()
+        
+        exit_action = QAction("Exit", self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(exit_action)
 
     def init_ui(self):
         # Apply Theme
@@ -97,7 +139,7 @@ class MainWindow(QMainWindow):
 
         # Nav Buttons
         self.nav_buttons = []
-        nav_items = [("Home", "🏠"), ("Scikit-Learn", "🔬"), ("PyTorch", "🔥"), 
+        nav_items = [("Home", "🏠"), ("Education", "📚"), ("Scikit-Learn", "🔬"), ("PyTorch", "🔥"), 
                      ("TensorFlow", "🧠"), ("MediaPipe", "📸"), ("RL Studio", "🎮")]
         
         for name, icon in nav_items:
@@ -111,9 +153,10 @@ class MainWindow(QMainWindow):
         sidebar_layout.addStretch()
         
         # Bottom Settings
-        btn_settings = QPushButton("⚙  Settings")
-        btn_settings.setObjectName("SidebarButton")
-        sidebar_layout.addWidget(btn_settings)
+        btn_theme = QPushButton("🌗 Toggle Theme")
+        btn_theme.setObjectName("SidebarButton")
+        btn_theme.clicked.connect(self.toggle_theme)
+        sidebar_layout.addWidget(btn_theme)
 
         main_layout.addWidget(self.sidebar)
 
@@ -143,6 +186,7 @@ class MainWindow(QMainWindow):
         self.view_dashboard = Dashboard()
         self.view_dashboard.library_selected.connect(self.navigate_to)
         
+        self.view_education = EducationView() if EducationView else PlaceholderView("Education")
         self.view_sklearn = SklearnView() if SklearnView else PlaceholderView("Scikit-Learn")
         self.view_pytorch = PyTorchView() if PyTorchView else PlaceholderView("PyTorch")
         self.view_tensorflow = TensorflowView() if TensorflowView else PlaceholderView("TensorFlow")
@@ -151,20 +195,22 @@ class MainWindow(QMainWindow):
         
         # Add to stack
         self.stack.addWidget(self.view_dashboard) # Index 0
-        self.stack.addWidget(self.view_sklearn)   # Index 1
-        self.stack.addWidget(self.view_pytorch)   # Index 2
-        self.stack.addWidget(self.view_tensorflow)# Index 3
-        self.stack.addWidget(self.view_mediapipe) # Index 4
-        self.stack.addWidget(self.view_rl)        # Index 5
+        self.stack.addWidget(self.view_education) # Index 1
+        self.stack.addWidget(self.view_sklearn)   # Index 2
+        self.stack.addWidget(self.view_pytorch)   # Index 3
+        self.stack.addWidget(self.view_tensorflow)# Index 4
+        self.stack.addWidget(self.view_mediapipe) # Index 5
+        self.stack.addWidget(self.view_rl)        # Index 6
 
         # Map names to indices
         self.view_map = {
             "Home": 0,
-            "Scikit-Learn": 1,
-            "PyTorch": 2,
-            "TensorFlow": 3,
-            "MediaPipe": 4,
-            "RL Studio": 5
+            "Education": 1,
+            "Scikit-Learn": 2,
+            "PyTorch": 3,
+            "TensorFlow": 4,
+            "MediaPipe": 5,
+            "RL Studio": 6
         }
 
         # Set default
@@ -194,3 +240,35 @@ class MainWindow(QMainWindow):
                     break
             if not found:
                  QMessageBox.information(self, "Info", f"Navigating to {page_name}")
+
+    def new_project(self):
+        # Reset Logic would go here
+        QMessageBox.information(self, "New Project", "Project reset (Placeholder).")
+
+    def save_project(self):
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save Project", "", "Dalil Project (*.dalil)")
+        if file_path:
+            # TODO: Gather real state from sub-views
+            # For now, we save metadata
+            state = {
+                "active_view": self.lbl_page_title.text(),
+                "created_with": "Dalil AI 2.0"
+            }
+            if ProjectManager.save_project(state, file_path):
+                QMessageBox.information(self, "Success", f"Project saved to {file_path}")
+            else:
+                QMessageBox.critical(self, "Error", "Failed to save project.")
+
+    def load_project(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Load Project", "", "Dalil Project (*.dalil)")
+        if file_path:
+            state = ProjectManager.load_project(file_path)
+            if state:
+                # Restore View
+                if "active_view" in state:
+                    self.navigate_to(state["active_view"])
+                QMessageBox.information(self, "Success", "Project loaded successfully.")
+    def toggle_theme(self):
+        Theme.toggle_theme(QApplication.instance())
+        # Force repaint of special widgets if needed
+        self.update()

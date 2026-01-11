@@ -32,3 +32,6 @@ shimmy>=2.0.0
 # Box2D (optional, for LunarLander)
 # Note: On Linux, this might need: sudo apt-get install swig
 box2d-py>=2.3.8
+
+# Reporting
+reportlab>=4.0.0

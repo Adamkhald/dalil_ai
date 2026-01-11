@@ -171,6 +171,20 @@ class RLStudioView(QWidget):
         btn_layout.addWidget(self.btn_viz)
         btn_layout.addWidget(self.btn_eval)
         cf_layout.addLayout(btn_layout)
+
+        # Export Code
+        self.btn_export = QPushButton("Export Code (.py) 📜")
+        self.btn_export.clicked.connect(self.export_code)
+        cf_layout.addWidget(self.btn_export)
+
+        # Log Area
+        cf_layout.addWidget(QLabel("Logs & Metrics"))
+        from PySide6.QtWidgets import QTextEdit
+        self.log_area = QTextEdit()
+        self.log_area.setReadOnly(True)
+        self.log_area.setMaximumHeight(150)
+        self.log_area.setStyleSheet("font-size: 11px;")
+        cf_layout.addWidget(self.log_area)
         
         content.addWidget(config_frame)
         
@@ -266,15 +280,34 @@ class RLStudioView(QWidget):
         if not self.pipeline: return
         env = self.combo_env.currentText()
         
-        self.status_label.setText("Evaluating agent (10 episodes)...")
-        # Run eval in UI thread for simplicity or short eval, but better threaded. 
-        # For now, let's keep it simple as it's just a query if fast, but 10 eps might take time.
-        # Let's do a quick blocking call or thread? Thread is better.
-        # Re-using worker pattern quickly or just executing. 
-        # Given complexity, let's do a quick inline update.
+        self.log("Evaluating agent (10 episodes)...")
+        # Inline for now, can be threaded later
         result = self.pipeline.evaluate_agent(env)
-        self.status_label.setText(result)
-        QMessageBox.information(self, "Evaluation Results", result)
+        
+        if isinstance(result, dict):
+            txt = "--- Evaluation Results ---\n"
+            for k, v in result.items():
+                txt += f"{k}: {v}\n"
+            self.log(txt)
+        else:
+            self.log(str(result))
+            
+    def export_code(self):
+        if not self.pipeline: return
+        code = self.pipeline.generate_code()
+        
+        from PySide6.QtWidgets import QFileDialog
+        path, _ = QFileDialog.getSaveFileName(self, "Export RL Code", "rl_agent.py", "Python Script (*.py)")
+        if path:
+            try:
+                with open(path, "w") as f:
+                    f.write(code)
+                self.log(f"Code saved to {path}")
+            except Exception as e:
+                self.log(f"Error saving code: {e}")
+
+    def log(self, msg):
+        self.log_area.append(msg)
         
     def update_frame(self, q_img):
         # Scale to fit the container, not the label itself (avoid loop)

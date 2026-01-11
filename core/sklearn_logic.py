@@ -100,9 +100,15 @@ class SklearnPipeline:
         
         return f"Model selected: {model_name} ({task_type})"
 
-    def train_model(self):
+    def train_model(self, hyperparams=None):
         if self.model is None or self.X_train is None:
             raise ValueError("Model or data not ready.")
+        
+        if hyperparams:
+            try:
+                self.model.set_params(**hyperparams)
+            except Exception as e:
+                return f"Error setting params: {str(e)}"
         
         self.model.fit(self.X_train, self.y_train)
         return "Training Completed."

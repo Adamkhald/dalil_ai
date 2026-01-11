@@ -9,28 +9,11 @@ from dalil_ai.ui.theme import Theme
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 import matplotlib.pyplot as plt
 
-# Simple Pandas Table Model
-class PandasModel(QAbstractTableModel):
-    def __init__(self, data):
-        super(PandasModel, self).__init__()
-        self._data = data
-
-    def rowCount(self, parent=None):
-        return self._data.shape[0]
-
-    def columnCount(self, parent=None):
-        return self._data.shape[1]
-
-    def data(self, index, role=Qt.DisplayRole):
-        if index.isValid():
-            if role == Qt.DisplayRole:
-                return str(self._data.iloc[index.row(), index.column()])
-        return None
-
-    def headerData(self, col, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
-            return self._data.columns[col]
-        return None
+from dalil_ai.ui.components.data_viewer import DataViewer
+from dalil_ai.ui.components.tuning_panel import TuningPanel
+from dalil_ai.core.report_generator import ReportGenerator
+from sklearn import datasets
+import pandas as pd
 
 class SklearnView(QWidget):
     def __init__(self):
@@ -86,6 +69,22 @@ class SklearnView(QWidget):
         self.content_area.setCurrentIndex(0)
 
     def switch_step(self, index):
+        if index > 0 and hasattr(self, 'data_viewer'):
+            modified_df = self.data_viewer.get_dataframe()
+            if not modified_df.empty:
+                self.pipeline.df = modified_df
+                # Also refresh columns in Step 2 combo if needed
+                if index == 1: # Preprocess Page
+                    cols = self.pipeline.get_columns()
+                    self.combo_target.clear()
+                    self.combo_target.addItems(cols)
+        
+        # Refresh Params Panel if entering Step 5 (Index 4)
+        if index == 4:
+             model_name = self.combo_model.currentText()
+             if hasattr(self, 'tuning_panel'):
+                 self.tuning_panel.update_for_model(model_name)
+
         for i, btn in enumerate(self.step_buttons):
             btn.setChecked(i == index)
         self.content_area.setCurrentIndex(index)
@@ -104,11 +103,22 @@ class SklearnView(QWidget):
         self.lbl_path = QLabel("No file loaded")
         btn_box.addWidget(self.btn_load)
         btn_box.addWidget(self.lbl_path)
+        btn_box.addWidget(self.btn_load)
+        btn_box.addWidget(self.lbl_path)
+        
+        # Built-in Datasets
+        btn_box.addSpacing(20)
+        btn_box.addWidget(QLabel("Or Built-in:"))
+        self.combo_builtin = QComboBox()
+        self.combo_builtin.addItems(["Select...", "Iris (Class)", "Housing (Reg)", "Wine (Class)", "Diabetes (Reg)", "Breast Cancer (Class)"])
+        self.combo_builtin.currentIndexChanged.connect(self.load_builtin_dataset)
+        btn_box.addWidget(self.combo_builtin)
+        
         btn_box.addStretch()
         layout.addLayout(btn_box)
         
-        self.table_preview = QTableView()
-        layout.addWidget(self.table_preview)
+        self.data_viewer = DataViewer()
+        layout.addWidget(self.data_viewer)
         
         self.content_area.addWidget(page)
 
@@ -185,10 +195,12 @@ class SklearnView(QWidget):
         page = QWidget()
         layout = QVBoxLayout(page)
         lbl = QLabel("Step 5: Hyperparameters")
-        lbl.setStyleSheet("font-size: 18px; font-weight: bold;")
+        lbl.setStyleSheet(f"font-size: 18px; color: {Theme.COLOR_PRIMARY}; font-weight: bold;")
         layout.addWidget(lbl)
-        layout.addWidget(QLabel("Using default parameters for selected model."))
-        layout.addStretch()
+        
+        self.tuning_panel = TuningPanel()
+        layout.addWidget(self.tuning_panel)
+        
         self.content_area.addWidget(page)
 
     def create_eval_page(self):
@@ -221,8 +233,12 @@ class SklearnView(QWidget):
         layout.addWidget(lbl)
         layout.addWidget(QLabel("Export trained model (.pkl) or results report."))
         
-        btn_save = QPushButton("Save Model")
+        btn_save = QPushButton("Save Model (.pkl)")
         layout.addWidget(btn_save)
+
+        btn_report = QPushButton("Export PDF Report")
+        btn_report.clicked.connect(self.export_report)
+        layout.addWidget(btn_report)
         
         layout.addSpacing(10)
         btn_code = QPushButton("Export Source Code (.py)")
@@ -246,16 +262,86 @@ class SklearnView(QWidget):
             except Exception as e:
                 QMessageBox.critical(self, "Error", str(e))
 
+    def export_report(self):
+        path, _ = QFileDialog.getSaveFileName(self, "Export PDF Report", "report.pdf", "PDF Files (*.pdf)")
+        if not path:
+            return
+            
+        try:
+            # Gather Info
+            title = "Sklearn Pipeline Run"
+            dataset_name = self.lbl_path.text()
+            
+            model_info = {"Algorithm": self.combo_model.currentText()}
+            params = self.tuning_panel.get_params()
+            model_info.update(params)
+            
+            metrics = self.pipeline.metrics
+            
+            figs = []
+            fig = self.pipeline.plot_results() # Generate fresh plot
+            if fig:
+                figs.append(fig)
+            
+            ReportGenerator.generate_pdf(path, title, dataset_name, model_info, metrics, figs)
+            QMessageBox.information(self, "Success", f"Report saved to {path}")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to generate report: {str(e)}")
+
     # --- Logic Connectors ---
     
+    def load_builtin_dataset(self):
+        name = self.combo_builtin.currentText()
+        if "Select" in name: return
+        
+        try:
+            df = None
+            if "Iris" in name:
+                data = datasets.load_iris()
+                df = pd.DataFrame(data.data, columns=data.feature_names)
+                df['target'] = data.target
+            elif "Housing" in name:
+                data = datasets.fetch_california_housing()
+                df = pd.DataFrame(data.data, columns=data.feature_names)
+                df['target'] = data.target
+            elif "Wine" in name:
+                data = datasets.load_wine()
+                df = pd.DataFrame(data.data, columns=data.feature_names)
+                df['target'] = data.target
+            elif "Diabetes" in name:
+                data = datasets.load_diabetes()
+                df = pd.DataFrame(data.data, columns=data.feature_names)
+                df['target'] = data.target
+            elif "Breast Cancer" in name:
+                data = datasets.load_breast_cancer()
+                df = pd.DataFrame(data.data, columns=data.feature_names)
+                df['target'] = data.target
+            
+            if df is not None:
+                self.pipeline.df = df
+                self.data_viewer.set_dataframe(df)
+                self.lbl_path.setText(f"Built-in: {name}")
+                
+                 # Update cols
+                cols = self.pipeline.get_columns()
+                self.combo_target.clear()
+                self.combo_target.addItems(cols)
+                
+                # Auto-select target if possible
+                if 'target' in cols:
+                    self.combo_target.setCurrentText('target')
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to load dataset: {str(e)}")
+
     def load_dataset(self):
         path, _ = QFileDialog.getOpenFileName(self, "Open CSV", "", "CSV Files (*.csv);;Excel Files (*.xlsx)")
         if path:
             self.lbl_path.setText(path)
             try:
                 df = self.pipeline.load_data(path)
-                model = PandasModel(df)
-                self.table_preview.setModel(model)
+                self.data_viewer.set_dataframe(df)
                 
                 # Update cols
                 cols = self.pipeline.get_columns()
@@ -288,10 +374,11 @@ class SklearnView(QWidget):
     def run_training(self):
         model_name = self.combo_model.currentText()
         task = self.combo_task.currentText()
+        params = self.tuning_panel.get_params()
         
         try:
             self.pipeline.select_model(model_name, task)
-            msg = self.pipeline.train_model()
+            msg = self.pipeline.train_model(hyperparams=params)
             self.lbl_train_status.setText(msg)
             self.switch_step(5) # Evalu
         except Exception as e:

@@ -39,3 +39,9 @@ pipeline_script.py
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Docker
+*.tar
+*.tar.gz
+dalil-ai-image.tar*
+results/

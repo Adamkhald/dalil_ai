@@ -115,10 +115,60 @@ class RLPipeline:
             mean_reward, std_reward = evaluate_policy(self.model, eval_env, n_eval_episodes=episodes)
             eval_env.close()
             
-            return f"Mean Reward: {mean_reward:.2f} +/- {std_reward:.2f}"
+            mean_reward, std_reward = evaluate_policy(self.model, eval_env, n_eval_episodes=episodes)
+            eval_env.close()
+            
+            return {
+                "Mean Reward": f"{mean_reward:.2f}",
+                "Std Deviation": f"{std_reward:.2f}",
+                "Episodes": episodes,
+                "Env ID": env_id,
+                "Status": "Success"
+            }
             
         except Exception as e:
-            return f"Evaluation failed: {str(e)}"
+            return {"Status": "Error", "Message": str(e)}
+
+    def generate_code(self):
+        """Generates standalone Python script for RL training."""
+        if not self.env_id:
+            return "# No experiment run yet."
+            
+        algo_name = self.model.__class__.__name__ if self.model else "PPO"
+        
+        code = f'''import gymnasium as gym
+from stable_baselines3 import {algo_name}
+
+# 1. Create Environment
+env_id = "{self.env_id}"
+env = gym.make(env_id, render_mode="rgb_array")
+
+# 2. Select Model
+print(f"Training {{algo_name}} on {{env_id}}...")
+model = {algo_name}("MlpPolicy", env, verbose=1)
+
+# 3. Train
+timesteps = 10000
+model.learn(total_timesteps=timesteps)
+
+# 4. Save
+model.save(f"{{algo_name}}_{{env_id}}")
+print("Training Saved.")
+
+# 5. Evaluate
+obs, _ = env.reset()
+terminated = False
+total_reward = 0
+while not terminated:
+    action, _ = model.predict(obs)
+    obs, reward, terminated, truncated, _ = env.step(action)
+    total_reward += reward
+    if truncated:
+        break
+print(f"Test Run Reward: {{total_reward}}")
+env.close()
+'''
+        return code
 
     def run_preview(self, env_id, episodes=3):
         """
